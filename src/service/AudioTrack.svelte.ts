@@ -13,6 +13,7 @@ export class AudioTrack {
   public id: number = Date.now();
   public name: string = $state("");
   public duration: number = 0;
+
   private _l: boolean;
   private _b: AudioBuffer;
   private _n: AudioBufferSourceNode;
