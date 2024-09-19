@@ -5,63 +5,75 @@
   import { Label } from "$lib/components/ui/label/index.ts";
   import { Input } from "$lib/components/ui/input/index.ts";
 
-  import { ListOfTracks, FILE_MAP, type FileMapKey } from "$service/AudioMapper";
+  import { ListOfTracks } from "$service/AudioMap";
+  import type { AudioTrack } from "$service/Audio.svelte";
 
-  const { id } = $props();
+  const {
+    track = $bindable(),
+    index,
+    isPlaying,
+  }: { track: AudioTrack; index: number; isPlaying: boolean } = $props();
 
-  let search = $state("")
+  let search = $state("");
 
-  let filtered = $derived(ListOfTracks.filter(t => t.toLocaleLowerCase().indexOf(search.toLowerCase()) !== -1))
+  const matchName = (t: string) => t.toLocaleLowerCase().indexOf(search.toLowerCase()) !== -1;
+  let filtered = $derived(ListOfTracks.filter(matchName));
 
   function handleOnSearch(e: EventTarget & HTMLInputElement) {
-    search = e.value
+    search = e.value;
   }
 
   function handleOnSelection(e: EventTarget & HTMLInputElement) {
-    console.log(e.value);
+    track.name = e.value;
   }
 
+  function handleOnChangeVolume(e: number[]) {
+    const v = e[0] / 100;
+    track.volume = v;
+  }
 </script>
 
 <Card.Root>
   <Card.Header class="py-2">
-    <Card.Title tag="h2" >
+    <Card.Title tag="h2">
       <span class="flex flex-row items-center justify-between">
-        Track:
-        <Select.Root portal={null}>
-          <Select.Trigger class="w-[350px]" >
-            <Select.Value placeholder="Select a track"   />
+        Track {index} :
+        <Select.Root portal={null} disabled={isPlaying}>
+          <Select.Trigger class="w-[350px]">
+            <Select.Value placeholder="Select a track" />
           </Select.Trigger>
-          <Select.Content >
-            <Input type="text" placeholder="Search" class="w-full pl-7" oninput={(e) => handleOnSearch(e.currentTarget)}/>
+          <Select.Content>
+            <Input
+              type="text"
+              placeholder="Search"
+              class="w-full pl-7"
+              oninput={(e) => handleOnSearch(e.currentTarget)}
+              autofocus
+            />
             <Select.Group>
               <div class="hide-scroll overflow-auto max-h-56">
-                {#each filtered as track}
-                  <Select.Item value={FILE_MAP[track as FileMapKey]} label={track}>{track}</Select.Item>
+                <Select.Item value="" label={"Not selected"}>Not selected</Select.Item>
+                {#each filtered as trackName}
+                  <Select.Item value={trackName} label={trackName}>{trackName}</Select.Item>
                 {/each}
               </div>
             </Select.Group>
           </Select.Content>
-          <Select.Input onchange={(e) => handleOnSelection(e.currentTarget)} name="favoriteFruit" />
+          <Select.Input onchange={(e) => handleOnSelection(e.currentTarget)} />
         </Select.Root>
       </span>
     </Card.Title>
   </Card.Header>
   <Card.Content class="pb-5">
     <span class="flex flex-row items-center justify-between">
-      <Label for={"track" + id} class="mr-20">Volume:</Label>
-      <Slider id={"track" + id} />
+      <Label class="mr-20">Volume:</Label>
+      <Slider
+        min={0}
+        max={100}
+        step={1}
+        value={[100]}
+        onValueChange={(e) => handleOnChangeVolume(e)}
+      />
     </span>
   </Card.Content>
 </Card.Root>
-
-<style>
-  .hide-scroll {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  .hide-scroll::-webkit-scrollbar {
-    display: none;
-  }
-</style>

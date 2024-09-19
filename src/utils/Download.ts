@@ -1,20 +1,25 @@
-export const downloadAudioFile = (
+export const downloadAudioFile = async (
   context: AudioContext,
-  url: string,
-  callback: (ab: AudioBuffer) => any
-): void => {
-  const xhr = new XMLHttpRequest();
+  url: string
+): Promise<AudioBuffer> => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
 
-  xhr.open("GET", url);
-  xhr.responseType = "blob";
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
 
-  xhr.onload = async function () {
-    if (this.status !== 200) return;
-    const blob = xhr.response;
-    const arrayBuffer = await blob.arrayBuffer();
-    const audioBuffer = await context.decodeAudioData(arrayBuffer);
-    callback(audioBuffer);
-  };
+    xhr.onload = async function () {
+      if (this.status !== 200) return;
+      const blob = xhr.response;
+      const arrayBuffer = await blob.arrayBuffer();
+      const audioBuffer = await context.decodeAudioData(arrayBuffer);
+      resolve(audioBuffer);
+    };
 
-  xhr.send();
+    xhr.onerror = function () {
+      reject("error download file");
+    };
+
+    xhr.send();
+  });
 };

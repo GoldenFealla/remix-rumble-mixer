@@ -1,5 +1,6 @@
 {
   "name": "remix-rumber-mixer",
+  "homepage": "https://goldenfealla.github.io/remix-rumble-mixer",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
@@ -15,6 +17,7 @@
     "@types/node": "^22.5.4",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.10",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.45",
     "svelte": "^5.0.0-next.245",
     "svelte-check": "^3.8.5",
