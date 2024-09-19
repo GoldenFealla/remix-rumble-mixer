@@ -48,7 +48,6 @@
               placeholder="Search"
               class="w-full pl-7"
               oninput={(e) => handleOnSearch(e.currentTarget)}
-              autofocus
             />
             <Select.Group>
               <div class="hide-scroll overflow-auto max-h-56">

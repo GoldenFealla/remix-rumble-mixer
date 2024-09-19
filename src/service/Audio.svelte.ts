@@ -135,7 +135,6 @@ export function CreatePlayer(): Player {
 
     _il = true;
     const notLoaded = _ts.filter((t) => !t.isLoaded);
-    console.log(notLoaded);
     await Promise.allSettled([...notLoaded.map((t) => t.load())]);
     _il = false;
     _dr = Math.max(..._ts.map((t) => t.duration));
