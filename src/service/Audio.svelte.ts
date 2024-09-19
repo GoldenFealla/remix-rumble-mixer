@@ -113,6 +113,7 @@ export function CreatePlayer(): Player {
   function interval() {
     if (!_cti) {
       _cti = setInterval(() => {
+        _ip = true;
         _ct += 0.1;
 
         if (_ct >= _dr) {
@@ -127,6 +128,8 @@ export function CreatePlayer(): Player {
   async function Play() {
     if (context.state === "running") {
       _ip = false;
+      clearInterval(_cti);
+      _cti = null;
       await context.suspend();
       return;
     }
