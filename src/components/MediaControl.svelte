@@ -1,6 +1,7 @@
 <script lang="ts">
   // Play Button Icon
   import Play from "lucide-svelte/icons/play";
+  import LoaderCircle from "lucide-svelte/icons/loader-circle";
   import Pause from "lucide-svelte/icons/pause";
 
   // Volume Icon
@@ -55,7 +56,9 @@
       {formatSecond(player.currentTime)}/{formatSecond(player.duration)}
     </span>
     <Button size="icon" onclick={handleOnChangePlaying} disabled={player.isLoading}>
-      {#if player.isPlaying}
+      {#if player.isLoading}
+        <LoaderCircle class="spinner" />
+      {:else if player.isPlaying}
         <Pause class="h-5 w-5" />
       {:else}
         <Play class="h-5 w-5" />
