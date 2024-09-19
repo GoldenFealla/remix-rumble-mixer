@@ -18,12 +18,10 @@
 
   const { player }: { player: Player } = $props();
 
-  let drag = $state(false);
-
+  let enter = $state(false);
   const handleOnSeeking = (e: number[]) => {
-    if (!drag) return;
+    if (!enter) return;
     const time = e[0];
-    console.log(time);
     player.Seek(time);
   };
 
@@ -44,11 +42,11 @@
     step={0.1}
     value={[player.currentTime]}
     onValueChange={(e) => handleOnSeeking(e)}
-    ondrag={() => {
-      drag = true;
+    onmouseenter={() => {
+      enter = true;
     }}
-    ondragend={() => {
-      drag = false;
+    onmouseleave={() => {
+      enter = false;
     }}
   />
   <div class="flex flex-row w-full justify-between items-center mt-5">
